@@ -1,9 +1,9 @@
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
 
+#include <vector>
 
-class Matrix
-{
+class Matrix: public std::vector<int> {
 public:
   Matrix();
 };

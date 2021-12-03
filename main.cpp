@@ -17,7 +17,7 @@ std::vector<int> connection_matrix;
 
 double const proba = 0.5;
 
-std::string output_file_name {"output_matrix.txt"};
+std::string const output_file_name {"output_matrix.txt"};
 
 int main(int argc, char** argv) {
   std::cout << "This is the Random Matrix Compression INterference FunctiOn project!" << std::endl;

@@ -13,5 +13,5 @@ Random Matrix Compression INterpolation FunctiOn
 - Run `git pull` for getting remote modifications to the files. Solve the eventual merge conflicts that appear.
 - Run `git push` to put your modifications on the remote server.
 
-# Class digrams
+# Class diagrams
 

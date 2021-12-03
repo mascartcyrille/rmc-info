@@ -13,25 +13,32 @@
 
 int const lines = 10;
 int const columns = 10;
-std::vector<int> connection_matrix(lines * columns, 0);
+std::vector<int> connection_matrix;
 
 double const proba = 0.5;
 
 std::string output_file_name {"output_matrix.txt"};
 
-int main() {
+int main(int argc, char** argv) {
   std::cout << "This is the Random Matrix Compression INterference FunctiOn project!" << std::endl;
 
-  { // Generate matrix
-    std::mt19937_64 prng;
-    std::uniform_real_distribution<double> unif(0., 1.);
+  { // Load Matrix
+    if(argc >= 2) {
+      std::ifstream ifs(argv[1]);
+      std::copy(std::istream_iterator<int>(ifs), std::istream_iterator<int>(), std::back_inserter(connection_matrix));
+      ifs.close();
+    } else { // Generate matrix
+      std::mt19937_64 prng;
+      std::uniform_real_distribution<double> unif(0., 1.);
 
-    std::generate(connection_matrix.begin(), connection_matrix.end(), [&](){return (unif(prng)<=proba)? 1: 0;});
+      connection_matrix.resize(lines * columns, 0);
+      std::generate(connection_matrix.begin(), connection_matrix.end(), [&](){return (unif(prng)<=proba)? 1: 0;});
+    }
+  }
 
-    for(int i {}; i < lines; ++i) {
-      for(int j {}; j < lines; ++j) {
-        std::cout << connection_matrix[i*lines + j] << " ";
-      }
+  { // Display matrix to console
+    for(auto el: connection_matrix) {
+        std::cout << el << " ";
     }
   }
 

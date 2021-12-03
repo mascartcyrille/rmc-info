@@ -24,12 +24,13 @@ classDiagram
       rmcInfo o-- compressedMatrix
       matrixLoader -- matrix
       class rmcInfo{
-          +int size
-          +string path
-          +rng rng
-          +matrix matrix
-          +matrixLoader matrixLoader
-          +int[] seed
+          -int size
+          -string path
+          -rng rng
+          -matrix matrix
+          -matrixLoader matrixLoader
+          -double currentTreshold
+          -int[] seed
           +main()
       }
       class rng{
@@ -42,7 +43,6 @@ classDiagram
       class simpleMatch{
           -deque<double> currentRandomSequence
           -deque<int[]> states
-          -double currentTreshold
           +match(matrix&, int, int)
           +initDeques(int)
           +shift()

@@ -15,3 +15,47 @@ Random Matrix Compression INterpolation FunctiOn
 
 # Class diagrams
 
+```mermaid
+classDiagram
+      simpleMatch o-- rng
+      rmcInfo o-- simpleMatch
+      rmcInfo o-- matrixLoader
+      rmcInfo o-- matrix
+      rmcInfo o-- compressedMatrix
+      matrixLoader -- matrix
+      class rmcInfo{
+          +int size
+          +string path
+          +rng rng
+          +matrix matrix
+          +matrixLoader matrixLoader
+          +int[] seed
+          +main()
+      }
+      class rng{
+          -int[] state
+          -int[] seed
+          +generate()
+          +getState()
+          +setSeed()
+      }
+      class simpleMatch{
+          -deque<double> currentRandomSequence
+          -deque<int[]> states
+          -double currentTreshold
+          +match(matrix&, int, int)
+          +initDeques(int)
+          +shift()
+      }
+      class matrix{
+          +vector<int>
+          +run()
+          +initMatrix(int size)
+      }
+      class matrixLoader{
+          +readFile(matrix *, string)
+      }
+      class compressedMatrix{
+          +vector<int[]> compressedMatrix
+      }
+```

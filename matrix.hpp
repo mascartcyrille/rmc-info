@@ -4,8 +4,12 @@
 #include <vector>
 
 class Matrix: public std::vector<int> {
-public:
-  Matrix();
+  public:
+    Matrix(int size);
+    void init();
+
+private:
+    int const size;
 };
 
 #endif // MATRIX_HPP

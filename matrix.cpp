@@ -1,6 +1,3 @@
 #include "matrix.hpp"
 
-Matrix::Matrix()
-{
-
-}
+Matrix::Matrix(int size): std::vector<int>(size, 0), size(size) {}

@@ -15,7 +15,7 @@ int const lines = 10;
 int const columns = 10;
 std::vector<int> connection_matrix;
 
-double const proba = 0.5;
+double const treshold = 0.5;
 
 std::string const output_file_name {"output_matrix.txt"};
 
@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
       std::uniform_real_distribution<double> unif(0., 1.);
 
       connection_matrix.resize(lines * columns, 0);
-      std::generate(connection_matrix.begin(), connection_matrix.end(), [&](){return (unif(prng)<=proba)? 1: 0;});
+      std::generate(connection_matrix.begin(), connection_matrix.end(), [&](){return (unif(prng)<=treshold)? 1: 0;});
     }
   }
 

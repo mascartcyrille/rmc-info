@@ -6,6 +6,11 @@
 #include <iterator>
 #include <algorithm>
 
+#include "matrix.hpp"
+#include "simplematch.hpp"
+#include "matrixloader.hpp"
+#include "compressedmatrix.hpp"
+
 int const lines = 10;
 int const columns = 10;
 std::vector<int> connection_matrix(lines * columns, 0);

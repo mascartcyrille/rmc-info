@@ -6,15 +6,16 @@
 
 #include "rng.hpp"
 
-class CompressedMatrix: public std::vector<RNGState*> {
+class CompressedMatrix: public std::vector<std::pair<RNGState, bool>> {
 public:
-  CompressedMatrix(int sz): std::vector<RNGState*>(sz, nullptr), size(sz), nbr_non_null_elements(0) {}
+  CompressedMatrix(int sz): std::vector<std::pair<RNGState, bool>>(sz, std::pair<RNGState, bool>(RNGState(), false)), size(sz), nbr_non_null_elements(0) {}
 
-  void setElement(size_t pos, RNGState* state) {
-    if(state != nullptr) {
+  void setElement(size_t pos, RNGState state) {
+    if((*this)[pos].second == false) {
       ++nbr_non_null_elements;
-      (*this)[pos] = state;
+      (*this)[pos].second = true;
     }
+    (*this)[pos].first = state;
   }
 
   bool full() {

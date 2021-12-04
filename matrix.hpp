@@ -23,8 +23,8 @@ class Matrix: public std::vector<int> {
         if(cm[line].second == true) {
           RNG prng(cm[line].first);
 
-          auto start = this->begin() + line;
-          std::generate(start, start + size, [&](){return (prng.generate() <= threshold)? 1: 0;});
+          auto start = std::next(this->begin(), line);
+          std::generate(start, std::next(start, size), [&](){return (prng.generate() <= threshold)? 1: 0;});
         }
       }
     }

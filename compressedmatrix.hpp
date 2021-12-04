@@ -4,10 +4,12 @@
 #include <array>
 #include <vector>
 
-class CompressedMatrix: public std::vector<std::array<int, 312>>
+#include "rng.hpp"
+
+class CompressedMatrix: public std::vector<RNGState>
 {
 public:
-  CompressedMatrix(): std::vector<std::array<int, 312>>() {}
+  CompressedMatrix(): std::vector<RNGState>() {}
 };
 
 #endif // COMPRESSEDMATRIX_HPP

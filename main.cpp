@@ -1,4 +1,5 @@
 #include <array>
+#include <tuple>
 #include <random>
 #include <string>
 #include <fstream>
@@ -91,7 +92,7 @@ int main(int argc, char **argv)
       {
         // Single fixed treshold
         double fixedMatchTreshold = 0.5 ;
-        bool match = sm.match(connection_matrix, fixedMatchTreshold, start, end) ; 
+        bool match = sm.match(connection_matrix, fixedMatchTreshold, start, end) ;
         if (match)
         {
           cm.setElement(i, sm.returnMatchingState(), fixedMatchTreshold);
@@ -101,7 +102,7 @@ int main(int argc, char **argv)
         // Single avg treshold => jolie amélioration par rapport au fixed en nombre de tours de boucle pour trouver
         /*double avgTreshold = sm.computeAverageThreshold(connection_matrix, size, start, end) ;
         //std::cout<<avgTreshold<<"\n";
-        bool match = sm.match(connection_matrix, avgTreshold, start, end) ; 
+        bool match = sm.match(connection_matrix, avgTreshold, start, end) ;
         if (match)
         {
           cm.setElement(i, sm.returnMatchingState(), avgTreshold);

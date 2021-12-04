@@ -21,6 +21,8 @@
 -essayer de compresser le Yale format ?
 -essayer des générateurs + pourris
 -parallelisation
+-Si on trouve des jolis matchs pour des matrices grandes => on peut les sauvegarder pour simplifier des traitements futurs ?
+-Couper la matrice en plus petits morceaux => rentabilité en fonction de la taille des états du générateur
 */
 
 double const genThreshold = 0.2;
@@ -31,7 +33,7 @@ int main(int argc, char **argv)
 {
   std::cout << "This is the Random Matrix Compression INterference FunctiOn project!" << std::endl;
 
-  int const size = 10;
+  int const size = 100;
 
   Matrix connection_matrix(size);
 
@@ -90,7 +92,7 @@ int main(int argc, char **argv)
   bool full = false;
   CompressedMatrix cm(size);
 
-  int loop = 0, limit = 10000;
+  int loop = 0, limit = 100000;
   do
   {
     int start = 0, end = size - 1;
@@ -99,7 +101,8 @@ int main(int argc, char **argv)
       if (std::get<1>(cm[i]) == false)
       {
         //ml.fixedTreshMatch(connection_matrix, cm, i, start, end, sm, 0.2, loop);
-        ml.avgTreshMatch(connection_matrix, cm, i, start, end, sm, loop);
+        //ml.avgTreshMatch(connection_matrix, cm, i, start, end, sm, loop);
+        ml.avgTreshMatchApprox(connection_matrix, cm, i, start, end, sm, 10, loop);
         //ml.stepTreshMatch(connection_matrix, cm, i, start, end, sm, 0.2, loop); //Faire des stepMatch C PA BIEN
         //ml.avgStepTreshMatch(connection_matrix, cm, i, start, end, sm, 0.2, 2, loop);
       }

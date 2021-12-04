@@ -15,7 +15,6 @@ private:
   int nbMatch;
 
 public:
-
   // Constructor
   SimpleMatch(int size)
   {
@@ -38,7 +37,7 @@ public:
   {
     int i = 0;
     int j = start;
-    nbMatch++; 
+    nbMatch++;
     bool match = true;
     while (j <= end && match)
     {
@@ -51,6 +50,37 @@ public:
       if (mat[j] != binValue)
       {
         match = false;
+      }
+      i++;
+      j++;
+    }
+    return match;
+  }
+
+  /* Does the given matrix line (indexes from start to end) match the currentRandomSequence ?
+ (approx match) */
+  bool approxMatch(Matrix &mat, double treshold, int start, int end, int toleratedErrors)
+  {
+    int i = 0;
+    int j = start;
+    int currError = 0;
+    nbMatch++;
+    bool match = true;
+    while (j <= end && match)
+    {
+      int binValue = 1;
+      if (currentRandomSequence[i] > treshold)
+      {
+        binValue = 0;
+      }
+
+      if (mat[j] != binValue)
+      {
+        currError++;
+        if (currError > toleratedErrors)
+        {
+          match = false;
+        }
       }
       i++;
       j++;

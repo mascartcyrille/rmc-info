@@ -42,11 +42,11 @@ public:
           (*this)[col] = (prng.generate() <= std::get<2>(cm[line])) ? 1 : 0;
         }
         thresholds[line] = std::get<2>(cm[line]) ;
-        start = start + size;
-        end = end + size;
         //    auto start = this->begin() + line;
         //   std::generate(start, start + size, [&](){return (prng.generate() <= threshold)? 1: 0;});
       }
+      start = start + size;
+      end = end + size;
     }
   }
 

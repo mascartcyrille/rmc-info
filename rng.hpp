@@ -38,6 +38,8 @@ public:
       state.mt[state.mti] =  (6364136223846793005ULL * (state.mt[state.mti-1] ^ (state.mt[state.mti-1] >> 62)) + state.mti);
   }
 
+  RNG(RNGState const& rngst): state(rngst) {}
+
   /**
    * @brief initialize by an array with array-length
    * @param init_key is the array for initializing keys

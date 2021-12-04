@@ -6,12 +6,13 @@
 #include <iterator>
 #include <algorithm>
 
+#include "rng.hpp"
 #include "matrix.hpp"
 #include "simplematch.hpp"
 #include "matrixloader.hpp"
 #include "compressedmatrix.hpp"
 
-double const treshold = 0.5;
+double const threshold = 0.5;
 
 std::string const output_file_name {"output_matrix.txt"};
 
@@ -22,22 +23,34 @@ int main(int argc, char** argv) {
 
   { // Load Matrix
     if(argc >= 2) {
-      std::ifstream ifs(argv[1]);
-      connection_matrix.clear();
-      std::copy(std::istream_iterator<int>(ifs), std::istream_iterator<int>(), std::back_inserter(connection_matrix));
-      ifs.close();
+      MatrixLoader ml;
+      ml.readFile(&connection_matrix, argv[1]);
     } else { // Generate matrix
-      std::mt19937_64 prng;
-      std::uniform_real_distribution<double> unif(0., 1.);
-
-      std::generate(connection_matrix.begin(), connection_matrix.end(), [&](){return (unif(prng)<=treshold)? 1: 0;});
+      RNG prng;
+      connection_matrix.initRandom(threshold, prng);
     }
+  }
+
+  { // Test PRNG class
+    RNG prng;
+    RNGState state = prng.getState();
+    for(int i = 0; i < 10; ++i) {
+      std::cout << prng.generate() << " ";
+    }
+    std::cout << "\n";
+
+    prng.setState(state);
+    for(int i = 0; i < 10; ++i) {
+      std::cout << prng.generate() << " ";
+    }
+    std::cout << "\n";
   }
 
   { // Display matrix to console
     for(auto el: connection_matrix) {
         std::cout << el << " ";
     }
+    std::cout << "\n";
   }
 
   { // Write matrix

@@ -5,6 +5,7 @@
 
 struct MWC128State {
   typedef uint64_t result_type;
+  using seed_type = result_type;
 
   /* The state must be initialized so that 0 < c < MWC_A1 - 1. */
   result_type x, c;
@@ -14,12 +15,26 @@ class MWC128 {
 public:
   using state_type  = MWC128State;
   using result_type = state_type::result_type;
+  using seed_type = state_type::seed_type;
+
+  static seed_type const default_seed = 19650218ULL;
+
+public:
+  /**
+   * @brief initializes mt[NN] with a seed
+   * @param seed
+   */
+  MWC128(seed_type sd = default_seed): state() {
+    state.x = sd;
+    state.c =  (6364136223846793005ULL * (state.x ^ (state.x >> 62)) + 1);
+  }
+
+  MWC128(state_type const& rngst): state(rngst) {}
 
 private:
   result_type const MWC_A1 {0xff3a275c007b8ee6};
 
 public:
-  MWC128() {}
   /*  Written in 2021 by Sebastiano Vigna (vigna@acm.org)
 
   To the extent possible under law, the author has dedicated all copyright
@@ -41,7 +56,7 @@ public:
      generator of the same type with stronger theoretical guarantees
      consider a Goresky-Klapper generalized multiply-with-carry generator.
   */
-  constexpr result_type generate() {
+  result_type generate() {
     const __uint128_t t = MWC_A1 * (__uint128_t)state.x + state.c;
     state.c = t >> 64;
     return state.x = t;
@@ -60,6 +75,23 @@ class MWC256 {
 public:
   using state_type  = MWC256State;
   using result_type = state_type::result_type;
+  using seed_type = state_type::seed_type;
+
+  static seed_type const default_seed = 19650218ULL;
+
+public:
+  /**
+   * @brief initializes mt[NN] with a seed
+   * @param seed
+   */
+  MWC256(seed_type sd = default_seed): state() {
+    state.x = sd;
+    state.c =  (6364136223846793005ULL * (state.x ^ (state.x >> 62)) + 1);
+    state.y =  (6364136223846793005ULL * (state.c ^ (state.c >> 62)) + 2);
+    state.z =  (6364136223846793005ULL * (state.y ^ (state.y >> 62)) + 3);
+  }
+
+  MWC256(state_type const& rngst): state(rngst) {}
 
 private:
   result_type const MWC_A3 {0xff377e26f82da74a};

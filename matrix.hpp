@@ -14,16 +14,18 @@ class Matrix: public std::vector<int> {
     Matrix(int size): std::vector<int>(size*size, 0), size(size) {}
 
   public:
-    void initRandom(double threshold, RNG& prng) {
+    template<class Gen>
+    void initRandom(typename Gen::result_type threshold, RNG<Gen>& prng) {
       std::generate(this->begin(), this->end(), [&](){return (prng.generate() <= threshold)? 1: 0;});
     }
 
-    void initFromCompressed(CompressedMatrix cm) {
+    template<class Gen>
+    void initFromCompressed(CompressedMatrix<Gen> cm) {
       int start = 0 ;
       int end = size - 1 ;
       for(int line = 0; line < size; ++line) {
         if(std::get<1>(cm[line]) == true) {
-          RNG prng(std::get<0>(cm[line]));
+          RNG<Gen> prng(std::get<0>(cm[line]));
           for(int col = start ; col <= end ; col++)
           {
             (*this)[col] = (prng.generate() <= std::get<2>(cm[line]))? 1: 0 ;

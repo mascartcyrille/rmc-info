@@ -22,7 +22,9 @@ class MT19937 {
 public:
   using state_type = MT19937State;
   using seed_type = state_type::seed_type;
-  using return_type = double;
+  using result_type = double;
+
+  static seed_type const default_seed = 19650218ULL;
 
 private:
   static int const NN = 312;
@@ -37,9 +39,7 @@ private:
    */
   static seed_type const LM = 0x7FFFFFFFULL;
 
-  static seed_type const default_seed = 19650218ULL;
-
-  static constexpr seed_type const mag01[2]={0ULL, MATRIX_A};
+  seed_type const mag01[2]={0ULL, MATRIX_A};
 
 public:
   /**
@@ -85,7 +85,7 @@ public:
    * @brief generates a random number on [0, 2^64-1]-interval
    * @return
    */
-  inline constexpr return_type generate() {
+  result_type generate() {
     seed_type x;
 
     if (state.mti >= NN) { /* generate NN words at one time */

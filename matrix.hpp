@@ -19,12 +19,19 @@ class Matrix: public std::vector<int> {
     }
 
     void initFromCompressed(CompressedMatrix cm, double threshold) {
+      int start = 0 ;
+      int end = size - 1 ;
       for(int line = 0; line < size; ++line) {
         if(cm[line].second == true) {
           RNG prng(cm[line].first);
-
-          auto start = std::next(this->begin(), line);
-          std::generate(start, std::next(start, size), [&](){return (prng.generate() <= threshold)? 1: 0;});
+          for(int col = start ; col <= end ; col++)
+          {
+            (*this)[col] = (prng.generate() <= threshold)? 1: 0 ;
+          }
+          start = start + size ;
+          end = end + size ;
+      //    auto start = this->begin() + line;
+       //   std::generate(start, start + size, [&](){return (prng.generate() <= threshold)? 1: 0;});
         }
       }
     }

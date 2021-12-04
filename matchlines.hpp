@@ -46,8 +46,8 @@ public:
     }
   }
 
-  //Multiple around avg tresholds => pas d'amélioration visible par rapport à multiple fixed tresholds, voire même dégradation.
-  void avgStepTreshMatch(Matrix &connection_matrix, CompressedMatrix &cm, int size, int matLine, int start, int end, SimpleMatch &sm, double tresholdStep, int loop)
+  //Multiple around avg tresholds : may be useful to limit exploration when treshold is near 0 or 1, but just using avg treshold seems better anyway.
+  void avgStepTreshMatch(Matrix &connection_matrix, CompressedMatrix &cm, int size, int matLine, int start, int end, SimpleMatch &sm, double tresholdStep, int maxDev, int loop)
   {
     double avgTreshold = sm.computeAverageThreshold(connection_matrix, size, start, end);
     bool match = sm.match(connection_matrix, avgTreshold, start, end);
@@ -60,8 +60,8 @@ public:
     {
       //We only explore around avg treshold
       double curTreshMax = avgTreshold + tresholdStep;
-      double curTreshMin = avgTreshold - tresholdStep;
-      while (curTreshMax < 1 && curTreshMin > 0 && !match)
+      int curDev = 0;
+      while (curTreshMax < 1 && !match && curDev <= maxDev)
       {
         match = sm.match(connection_matrix, curTreshMax, start, end);
         if (match)
@@ -69,17 +69,22 @@ public:
           cm.setElement(matLine, sm.returnMatchingState(), curTreshMax);
           std::cout << "Found match for line " << matLine << " in loop " << loop << ", with matching nb " << sm.getNbMatch() << " and treshold " << curTreshMax << "\n";
         }
-        else
-        {
-          match = sm.match(connection_matrix, curTreshMin, start, end);
-          if (match)
-          {
-            cm.setElement(matLine, sm.returnMatchingState(), curTreshMin);
-            std::cout << "Found match for line " << matLine << " in loop " << loop << ", with matching nb " << sm.getNbMatch() << " and treshold " << curTreshMin << "\n";
-          }
-        }
         curTreshMax = curTreshMax + tresholdStep;
+        curDev++ ;
+      }
+
+      double curTreshMin = avgTreshold - tresholdStep;
+      curDev = 0 ;
+      while (curTreshMax < 1 && curTreshMin > 0 && !match && curDev <= maxDev)
+      {
+        match = sm.match(connection_matrix, curTreshMin, start, end);
+        if (match)
+        {
+          cm.setElement(matLine, sm.returnMatchingState(), curTreshMin);
+          std::cout << "Found match for line " << matLine << " in loop " << loop << ", with matching nb " << sm.getNbMatch() << " and treshold " << curTreshMin << "\n";
+        }
         curTreshMin = curTreshMin - tresholdStep;
+        curDev++ ;
       }
     }
   }

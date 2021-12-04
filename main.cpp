@@ -92,9 +92,9 @@ int main(int argc, char **argv)
       if (std::get<1>(cm[i]) == false)
       {
         //ml.fixedTreshMatch(connection_matrix, cm, i, start, end, sm, 0.2, loop);
-        //ml.avgTreshMatch(connection_matrix, cm, size, i, start, end, sm, loop);
+        ml.avgTreshMatch(connection_matrix, cm, size, i, start, end, sm, loop);
         //ml.stepTreshMatch(connection_matrix, cm, i, start, end, sm, 0.2, loop); //Faire des stepMatch C PA BIEN
-        ml.avgStepTreshMatch(connection_matrix, cm, size, i, start, end, sm, 0.2, loop);
+        //ml.avgStepTreshMatch(connection_matrix, cm, size, i, start, end, sm, 0.2, 2, loop);
       }
       start = start + size;
       end = end + size;

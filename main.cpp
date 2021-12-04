@@ -18,6 +18,7 @@
 -error margin (compression avec pertes)
 -error margin (compression + dictionnaire)
 -essayer de compresser le Yale format ?
+-essayer des générateurs + pourris
 -parallelisation
 */
 

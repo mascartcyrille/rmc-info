@@ -3,6 +3,7 @@
 
 #include <array>
 #include <vector>
+#include <tuple>
 
 #include "rng.hpp"
 

@@ -12,17 +12,24 @@ private:
   std::deque<double> currentRandomSequence;
   std::deque<RNGState> states;
   RNG prng;
+  int nbMatch;
 
 public:
 
   // Constructor
   SimpleMatch(int size)
   {
+    nbMatch = 0;
     for (int i = 0; i < size; i++)
     {
       states.push_back(prng.getState());
       currentRandomSequence.push_back(prng.generate());
     }
+  }
+
+  int getNbMatch()
+  {
+    return nbMatch;
   }
 
   /* Does the given matrix line (indexes from start to end) match the currentRandomSequence ?
@@ -31,6 +38,7 @@ public:
   {
     int i = 0;
     int j = start;
+    nbMatch++; 
     bool match = true;
     while (j <= end && match)
     {

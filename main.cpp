@@ -7,11 +7,15 @@
 #include <iterator>
 #include <algorithm>
 
-#include "rng.hpp"
 #include "matrix.hpp"
 #include "simplematch.hpp"
 #include "matrixloader.hpp"
 #include "compressedmatrix.hpp"
+
+#include "mwc.hpp"
+#include "rng.hpp"
+#include "mt19937.hpp"
+#include "xoshiro.hpp"
 
 /*Le plan
 -Optimal threshold
@@ -43,7 +47,7 @@ int main(int argc, char **argv)
     }
     else
     { // Generate matrix
-      RNG prng(5);
+      RNG<MT19937> prng(5);
       connection_matrix.initRandom(genThreshold, prng);
     }
   }

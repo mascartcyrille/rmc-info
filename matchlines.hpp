@@ -17,9 +17,9 @@ public:
   }
 
   // Single avg treshold => jolie amélioration par rapport au fixed en nombre de tours de boucle pour trouver
-  void avgTreshMatch(Matrix &connection_matrix, CompressedMatrix &cm, int size, int matLine, int start, int end, SimpleMatch &sm, int loop)
+  void avgTreshMatch(Matrix &connection_matrix, CompressedMatrix &cm, int matLine, int start, int end, SimpleMatch &sm, int loop)
   {
-    double avgTreshold = sm.computeAverageThreshold(connection_matrix, size, start, end);
+    double avgTreshold = connection_matrix.getAverageThreshold(matLine);
     //std::cout<<avgTreshold<<"\n";
     bool match = sm.match(connection_matrix, avgTreshold, start, end);
     if (match)
@@ -47,9 +47,9 @@ public:
   }
 
   //Multiple around avg tresholds : may be useful to limit exploration when treshold is near 0 or 1, but just using avg treshold seems better anyway.
-  void avgStepTreshMatch(Matrix &connection_matrix, CompressedMatrix &cm, int size, int matLine, int start, int end, SimpleMatch &sm, double tresholdStep, int maxDev, int loop)
+  void avgStepTreshMatch(Matrix &connection_matrix, CompressedMatrix &cm, int matLine, int start, int end, SimpleMatch &sm, double tresholdStep, int maxDev, int loop)
   {
-    double avgTreshold = sm.computeAverageThreshold(connection_matrix, size, start, end);
+    double avgTreshold = connection_matrix.getAverageThreshold(matLine);
     bool match = sm.match(connection_matrix, avgTreshold, start, end);
     if (match)
     {

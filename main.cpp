@@ -69,6 +69,13 @@ int main(int argc, char **argv)
       std::cout << el << " ";
     }
     std::cout << "\n";
+
+    std::cout << "Tresholds : ";
+    for (int i = 0; i < size; i++)
+    {
+      std::cout << connection_matrix.getAverageThreshold(i) << " ";
+    }
+    std::cout << "\n";
   }
 
   { // Write matrix
@@ -92,9 +99,9 @@ int main(int argc, char **argv)
       if (std::get<1>(cm[i]) == false)
       {
         //ml.fixedTreshMatch(connection_matrix, cm, i, start, end, sm, 0.2, loop);
-        ml.avgTreshMatch(connection_matrix, cm, size, i, start, end, sm, loop);
+        ml.avgTreshMatch(connection_matrix, cm, i, start, end, sm, loop);
         //ml.stepTreshMatch(connection_matrix, cm, i, start, end, sm, 0.2, loop); //Faire des stepMatch C PA BIEN
-        //ml.avgStepTreshMatch(connection_matrix, cm, size, i, start, end, sm, 0.2, 2, loop);
+        //ml.avgStepTreshMatch(connection_matrix, cm, i, start, end, sm, 0.2, 2, loop);
       }
       start = start + size;
       end = end + size;
@@ -112,6 +119,13 @@ int main(int argc, char **argv)
     for (auto el : reconstructed_matrix)
     {
       std::cout << el << " ";
+    }
+    std::cout << "\n";
+
+    std::cout << "Tresholds : ";
+    for (int i = 0; i < size; i++)
+    {
+      std::cout << reconstructed_matrix.getAverageThreshold(i) << " ";
     }
     std::cout << "\n";
   }

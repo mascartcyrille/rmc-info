@@ -18,15 +18,15 @@ class Matrix: public std::vector<int> {
       std::generate(this->begin(), this->end(), [&](){return (prng.generate() <= threshold)? 1: 0;});
     }
 
-    void initFromCompressed(CompressedMatrix cm, double threshold) {
+    void initFromCompressed(CompressedMatrix cm) {
       int start = 0 ;
       int end = size - 1 ;
       for(int line = 0; line < size; ++line) {
-        if(cm[line].second == true) {
-          RNG prng(cm[line].first);
+        if(std::get<1>(cm[line]) == true) {
+          RNG prng(std::get<0>(cm[line]));
           for(int col = start ; col <= end ; col++)
           {
-            (*this)[col] = (prng.generate() <= threshold)? 1: 0 ;
+            (*this)[col] = (prng.generate() <= std::get<2>(cm[line]))? 1: 0 ;
           }
           start = start + size ;
           end = end + size ;

@@ -26,6 +26,8 @@
 -essayer de compresser le Yale format ?
 -essayer des générateurs + pourris
 -parallelisation
+-Si on trouve des jolis matchs pour des matrices grandes => on peut les sauvegarder pour simplifier des traitements futurs ?
+-Couper la matrice en plus petits morceaux => rentabilité en fonction de la taille des états du générateur
 */
 
 /**
@@ -67,7 +69,7 @@ int main(int argc, char **argv)
 {
   std::cout << "This is the Random Matrix Compression INterference FunctiOn project!" << std::endl;
 
-  int const size = 10;
+  int const size = 100;
 
   Matrix connection_matrix(size);
   //  Matrix connection_matrix2(size);

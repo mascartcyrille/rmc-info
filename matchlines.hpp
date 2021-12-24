@@ -53,6 +53,20 @@ struct MatchLines {
     }
   }
 
+  // Single avg treshold => jolie amélioration par rapport au fixed en nombre de tours de boucle pour trouver
+  template<class Gen>
+  void avgTreshMatchApprox(Matrix &connection_matrix, CompressedMatrix<Gen> &cm, int matLine, int start, int end, SimpleMatch<Gen> &sm, int toleratedErrors, int loop)
+  {
+    double avgTreshold = connection_matrix.getAverageThreshold(matLine);
+    //std::cout<<avgTreshold<<"\n";
+    bool match = sm.approxMatch(connection_matrix, avgTreshold, start, end, toleratedErrors);
+    if (match)
+    {
+      cm.setElement(matLine, sm.returnMatchingState(), avgTreshold);
+      std::cout << "Found match for line " << matLine << " in loop " << loop << ", with matching nb " << sm.getNbMatch() << " and treshold " << avgTreshold << "\n";
+    }
+  }
+
   // Multiple fixed tresholds => bad results
   /**
    * @brief stepTreshMatch

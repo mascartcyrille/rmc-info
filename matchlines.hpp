@@ -2,9 +2,22 @@
 #include "matrix.hpp"
 #include "simplematch.hpp"
 
-
+/**
+ * @brief The MatchLines struct
+ */
 struct MatchLines {
   // Single fixed treshold
+  /**
+   * @brief fixedTreshMatch
+   * @param connection_matrix
+   * @param cm
+   * @param matLine
+   * @param start
+   * @param end
+   * @param sm
+   * @param fixedMatchTreshold
+   * @param loop
+   */
   template<class Gen>
   void fixedTreshMatch(Matrix &connection_matrix, CompressedMatrix<Gen> &cm, int matLine, int start, int end, SimpleMatch<Gen> &sm, double fixedMatchTreshold, int loop)
   {
@@ -17,11 +30,21 @@ struct MatchLines {
   }
 
   // Single avg treshold => jolie amélioration par rapport au fixed en nombre de tours de boucle pour trouver
+  /**
+   * @brief avgTreshMatch
+   * @param connection_matrix
+   * @param cm
+   * @param matLine
+   * @param start
+   * @param end
+   * @param sm
+   * @param loop
+   */
   template<class Gen>
-  void avgTreshMatch(Matrix &connection_matrix, CompressedMatrix<Gen> &cm, int size, int matLine, int start, int end, SimpleMatch<Gen> &sm, int loop)
+  void avgTreshMatch(Matrix &connection_matrix, CompressedMatrix<Gen> &cm, int matLine, int start, int end, SimpleMatch<Gen> &sm, int loop)
   {
-    double avgTreshold = sm.computeAverageThreshold(connection_matrix, size, start, end);
-    //std::cout<<avgTreshold<<"\n";
+    double avgTreshold = connection_matrix.getAverageThreshold(matLine);
+    // std::cout<<avgTreshold<<"\n";
     bool match = sm.match(connection_matrix, avgTreshold, start, end);
     if (match)
     {
@@ -31,6 +54,17 @@ struct MatchLines {
   }
 
   // Multiple fixed tresholds => bad results
+  /**
+   * @brief stepTreshMatch
+   * @param connection_matrix
+   * @param cm
+   * @param matLine
+   * @param start
+   * @param end
+   * @param sm
+   * @param tresholdStep
+   * @param loop
+   */
   template<class Gen>
   void stepTreshMatch(Matrix &connection_matrix, CompressedMatrix<Gen> &cm, int matLine, int start, int end, SimpleMatch<Gen> &sm, double tresholdStep, int loop)
   {
@@ -49,10 +83,22 @@ struct MatchLines {
   }
 
   //Multiple around avg tresholds : may be useful to limit exploration when treshold is near 0 or 1, but just using avg treshold seems better anyway.
+  /**
+   * @brief avgStepTreshMatch
+   * @param connection_matrix
+   * @param cm
+   * @param matLine
+   * @param start
+   * @param end
+   * @param sm
+   * @param tresholdStep
+   * @param maxDev
+   * @param loop
+   */
   template<class Gen>
-  void avgStepTreshMatch(Matrix &connection_matrix, CompressedMatrix<Gen> &cm, int size, int matLine, int start, int end, SimpleMatch<Gen> &sm, double tresholdStep, int maxDev, int loop)
+  void avgStepTreshMatch(Matrix &connection_matrix, CompressedMatrix<Gen> &cm, int matLine, int start, int end, SimpleMatch<Gen> &sm, double tresholdStep, int maxDev, int loop)
   {
-    double avgTreshold = sm.computeAverageThreshold(connection_matrix, size, start, end);
+    double avgTreshold = connection_matrix.getAverageThreshold(matLine);
     bool match = sm.match(connection_matrix, avgTreshold, start, end);
     if (match)
     {

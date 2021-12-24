@@ -3,12 +3,27 @@
 
 #include <cstdint>
 
+/**
+ * @brief The MWC128State struct
+ */
 struct MWC128State {
+  /**
+   * @brief result_type
+   */
   typedef uint64_t result_type;
+  /**
+   *
+   */
   using seed_type = result_type;
 
-  /* The state must be initialized so that 0 < c < MWC_A1 - 1. */
-  result_type x, c;
+  /**
+   * @brief x
+   */
+  result_type x;
+  /**
+   * @brief The state must be initialized so that 0 < c < MWC_A1 - 1.
+   */
+  result_type c;
 };
 
 class MWC128 {
@@ -24,12 +39,24 @@ public:
    * @brief initializes mt[NN] with a seed
    * @param seed
    */
-  MWC128(seed_type sd = default_seed): state() {
+  MWC128(seed_type sd = default_seed):
+    state()
+  {
     state.x = sd;
     state.c =  (6364136223846793005ULL * (state.x ^ (state.x >> 62)) + 1);
   }
 
-  MWC128(state_type const& rngst): state(rngst) {}
+  MWC128(state_type const& rngst):
+    state(rngst)
+  {
+
+  }
+
+  MWC128(state_type && rngst):
+    state(rngst)
+  {
+
+  }
 
 private:
   result_type const MWC_A1 {0xff3a275c007b8ee6};
@@ -56,7 +83,7 @@ public:
      generator of the same type with stronger theoretical guarantees
      consider a Goresky-Klapper generalized multiply-with-carry generator.
   */
-  result_type generate() {
+  result_type generate(void) {
     const __uint128_t t = MWC_A1 * (__uint128_t)state.x + state.c;
     state.c = t >> 64;
     return state.x = t;
@@ -91,7 +118,17 @@ public:
     state.z =  (6364136223846793005ULL * (state.y ^ (state.y >> 62)) + 3);
   }
 
-  MWC256(state_type const& rngst): state(rngst) {}
+  MWC256(state_type const& rngst):
+    state(rngst)
+  {
+
+  }
+
+  MWC256(state_type && rngst):
+    state(rngst)
+  {
+
+  }
 
 private:
   result_type const MWC_A3 {0xff377e26f82da74a};
@@ -112,7 +149,7 @@ public:
      consider a Goresky-Klapper generalized multiply-with-carry generator.
   */
 
-  result_type inline next() {
+  result_type generate(void) {
     const __uint128_t t = MWC_A3 * (__uint128_t)state.x + state.c;
     state.x = state.y;
     state.y = state.z;

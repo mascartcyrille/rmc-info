@@ -70,18 +70,6 @@ public:
   {
     return states.front();
   }
-
-  // Return average threshold
-  double computeAverageThreshold(Matrix &mat, int size, int start, int end)
-  {
-    double sum = 0;
-    for (int i = start; i <= end; i++)
-    {
-      sum = sum + mat[i];
-    }
-    return sum/size ;
-  }
-
 };
 
 #endif // SIMPLEMATCH_HPP

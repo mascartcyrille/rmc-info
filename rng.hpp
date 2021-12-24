@@ -6,36 +6,56 @@
 #include <iostream>
 #include <iterator>
 
-template<class State>
-struct RNGState: public State {
-  RNGState() = default;
-  RNGState(RNGState<State> const& st) = default;
-  RNGState(RNGState<State> && st) = default;
-  RNGState& operator=(RNGState const& st) = default;
-  RNGState& operator=(RNGState && st) = default;
-  ~RNGState() = default;
-};
-
+/**
+ * @brief The RNG class
+ */
 template<class Gen>
 class RNG: public Gen {
 public:
+  /**
+   * @brief RNG
+   * @param sd
+   */
   RNG(typename Gen::seed_type sd = Gen::default_seed): Gen(sd) {}
 
+  /**
+   * @brief RNG
+   * @param rngst
+   */
   RNG(typename Gen::state_type const& rngst): Gen(rngst) {}
 
+  /**
+   * @brief RNG
+   * @param rngst
+   */
+  RNG(typename Gen::state_type && rngst): Gen(rngst) {}
+
 public:
-  RNGState<typename Gen::state_type> getState() {
-    return state;
+  /**
+   * @brief getState
+   * @return
+   */
+  typename Gen::state_type& getState() {
+    return Gen::state;
   }
 
-  void setState(RNGState<typename Gen::state_type>& st) {
-    state = st;
+  /**
+   * @brief setState
+   * @param st
+   */
+  void setState(typename Gen::state_type const& st) {
+    Gen::state = st;
+  }
+
+  /**
+   * @brief setState
+   * @param st
+   */
+  void setState(typename Gen::state_type && st) {
+    Gen::state = st;
   }
 
 private:
-  RNGState<typename Gen::state_type> state;
 };
-
-
 
 #endif // RNG_HPP

@@ -1,12 +1,82 @@
 #ifndef MT19937_HPP
 #define MT19937_HPP
 
+/**
+ * @brief The MT19937State struct
+ */
 struct MT19937State {
+  /**
+   * @brief seed_type
+   */
   typedef unsigned long long seed_type;
 
+  /**
+   * @brief NN
+   */
   static int const NN = 312;
 
-  MT19937State(): mti(NN+1) {}
+  /**
+   * @brief MT19937State
+   */
+  MT19937State():
+    mti(NN+1)
+  {
+
+  }
+  /**
+   * @brief MT19937State
+   * @param st
+   */
+  MT19937State(MT19937State const& st)
+  {
+    mti = st.mti;
+    for(int i = 0; i < NN; ++i)
+    {
+      mt[i] = st.mt[i];
+    }
+  }
+  /**
+   * @brief MT19937State
+   * @param st
+   */
+  MT19937State(MT19937State && st)
+  {
+    mti = st.mti;
+    for(int i = 0; i < NN; ++i)
+    {
+      mt[i] = st.mt[i];
+    }
+  }
+  /**
+   * @brief operator =
+   * @param st
+   * @return
+   */
+  MT19937State& operator=(MT19937State const& st)
+  {
+    mti = st.mti;
+    for(int i = 0; i < NN; ++i)
+    {
+      mt[i] = st.mt[i];
+    }
+
+    return *this;
+  }
+  /**
+   * @brief operator =
+   * @param st
+   * @return
+   */
+  MT19937State& operator=(MT19937State && st)
+  {
+    mti = st.mti;
+    for(int i = 0; i < NN; ++i)
+    {
+      mt[i] = st.mt[i];
+    }
+
+    return *this;
+  }
 
   /**
    * @brief The array for the state vector
@@ -18,6 +88,9 @@ struct MT19937State {
   int mti;
 };
 
+/**
+ * @brief The MT19937 class
+ */
 class MT19937 {
 public:
   using state_type = MT19937State;
@@ -25,6 +98,8 @@ public:
   using result_type = double;
 
   static seed_type const default_seed = 19650218ULL;
+
+  static int count;
 
 private:
   static int const NN = 312;
@@ -46,13 +121,33 @@ public:
    * @brief initializes mt[NN] with a seed
    * @param seed
    */
-  MT19937(seed_type sd = default_seed): state() {
+  MT19937(seed_type sd = default_seed):
+    state()
+  {
     state.mt[0] = sd;
     for (state.mti=1; state.mti<NN; state.mti++)
       state.mt[state.mti] =  (6364136223846793005ULL * (state.mt[state.mti-1] ^ (state.mt[state.mti-1] >> 62)) + state.mti);
   }
 
-  MT19937(state_type const& rngst): state(rngst) {}
+  /**
+   * @brief MT19937
+   * @param rngst
+   */
+  MT19937(state_type const& rngst):
+    state(rngst)
+  {
+
+  }
+
+  /**
+   * @brief MT19937
+   * @param rngst
+   */
+  MT19937(state_type && rngst):
+    state(rngst)
+  {
+
+  }
 
   /**
    * @brief initialize by an array with array-length
@@ -85,25 +180,23 @@ public:
    * @brief generates a random number on [0, 2^64-1]-interval
    * @return
    */
-  result_type generate() {
-    seed_type x;
-
+  result_type generate(void) {
     if (state.mti >= NN) { /* generate NN words at one time */
       for (int i=0;i<NN-MM;i++) {
-        x = (state.mt[i]&UM)|(state.mt[i+1]&LM);
+        seed_type x = (state.mt[i]&UM)|(state.mt[i+1]&LM);
         state.mt[i] = state.mt[i+MM] ^ (x>>1) ^ mag01[(int)(x&1ULL)];
       }
       for (int i = NN-MM;i<NN-1;i++) {
-        x = (state.mt[i]&UM)|(state.mt[i+1]&LM);
+        seed_type x = (state.mt[i]&UM)|(state.mt[i+1]&LM);
         state.mt[i] = state.mt[i+(MM-NN)] ^ (x>>1) ^ mag01[(int)(x&1ULL)];
       }
-      x = (state.mt[NN-1]&UM)|(state.mt[0]&LM);
+      seed_type x = (state.mt[NN-1]&UM)|(state.mt[0]&LM);
       state.mt[NN-1] = state.mt[MM-1] ^ (x>>1) ^ mag01[(int)(x&1ULL)];
 
       state.mti = 0;
     }
 
-    x = state.mt[state.mti++];
+    seed_type x = state.mt[state.mti++];
 
     x ^= (x >> 29) & 0x5555555555555555ULL;
     x ^= (x << 17) & 0x71D67FFFEDA60000ULL;
@@ -113,8 +206,13 @@ public:
     return (x >> 11) * (1.0/9007199254740991.0);
   }
 
-private:
+protected:
+  /**
+   * @brief state
+   */
   state_type state;
 };
+
+int MT19937::count = 0;
 
 #endif // MT19937_HPP

@@ -9,37 +9,107 @@
 #include "rng.hpp"
 #include "compressedmatrix.hpp"
 
+/**
+ * @brief The Matrix class
+ */
 class Matrix: public std::vector<int> {
-  public:
-    Matrix(int size): std::vector<int>(size*size, 0), size(size) {}
+public:
+  /**
+   * @brief Matrix
+   * @param size
+   */
+  Matrix(int sz)
+    : std::vector<int>(sz * sz, 0),
+      size(sz),
+      thresholds(sz, 0)
+  {
 
-  public:
-    template<class Gen>
-    void initRandom(typename Gen::result_type threshold, RNG<Gen>& prng) {
-      std::generate(this->begin(), this->end(), [&](){return (prng.generate() <= threshold)? 1: 0;});
+  }
+
+public:
+  /**
+   * @brief initRandom
+   * @param threshold
+   * @param prng
+   */
+  template<class Gen>
+  void initRandom(typename Gen::result_type const threshold, RNG<Gen>& prng)
+  {
+    std::generate(this->begin(),
+                  this->end(),
+                  [&](){ return (prng.generate() <= threshold) ? 1 : 0; }
+    );
+    int start = 0, end = size - 1;
+    for (int i = 0; i < size; i++)
+    {
+      thresholds[i] = computeAverageThreshold(start, end) ;
+      start = start + size;
+      end = end + size;
     }
+  }
 
-    template<class Gen>
-    void initFromCompressed(CompressedMatrix<Gen> cm) {
-      int start = 0 ;
-      int end = size - 1 ;
-      for(int line = 0; line < size; ++line) {
-        if(std::get<1>(cm[line]) == true) {
-          RNG<Gen> prng(std::get<0>(cm[line]));
-          for(int col = start ; col <= end ; col++)
-          {
-            (*this)[col] = (prng.generate() <= std::get<2>(cm[line]))? 1: 0 ;
-          }
-          start = start + size ;
-          end = end + size ;
-      //    auto start = this->begin() + line;
-       //   std::generate(start, start + size, [&](){return (prng.generate() <= threshold)? 1: 0;});
+  /**
+   * @brief initFromCompressed
+   * @param cm
+   */
+  template<class Gen>
+  void initFromCompressed(CompressedMatrix<Gen> const& cm)
+  {
+    int start = 0 ;
+    int end = size - 1 ;
+    for(int line = 0; line < size; ++line)
+    {
+      if(std::get<1>(cm[line]) == true)
+      {
+        RNG<Gen> prng(std::get<0>(cm[line]));
+        for(int col = start ; col <= end ; col++)
+        {
+          auto tmp = prng.generate();
+          auto thr = std::get<2>(cm[line]);
+          (*this)[col] = ((tmp <= thr)? 1: 0);
         }
       }
+      start = start + size ;
+      end = end + size ;
+      thresholds[line] = std::get<2>(cm[line]) ;
     }
+  }
+
+  /**
+   * @brief Compute average threshold
+   * @param start
+   * @param end
+   * @return
+   */
+  double computeAverageThreshold(int start, int end) const
+  {
+    double sum = 0;
+    for (int i = start; i <= end; i++)
+    {
+      sum = sum + (*this)[i];
+    }
+    return sum / size;
+  }
+
+  /**
+   * @brief Getter avg treshold
+   * @param line
+   * @return
+   */
+  double getAverageThreshold(int line) const
+  {
+    return thresholds[line] ;
+  }
 
 private:
-    int const size;
+  /**
+   * @brief size
+   */
+  int const size;
+  /**
+   * @brief thresholds
+   */
+  std::vector<double> thresholds;
 };
 
 #endif // MATRIX_HPP
